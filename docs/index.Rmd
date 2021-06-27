@@ -1,6 +1,6 @@
 ---
 title: "R aplicado a empreedendorismo"
-subtitle: "Usando o R para explorar bases de empreendedorismo"
+subtitle: "Usando o R para explorar GEM"
 author: "Daniel Pagotto"
 contact: "danielppagotto@gmail.com"
 institute: "LAPEI/UFG e CIGETS/UFG"
@@ -22,19 +22,7 @@ knitr::include_graphics("imagem/realizacao.png")
 
 ```
 
----
-# About me! 
 
-- Bacharel em Administração (UnB), Mestre em Administração (UFG), doutorando em Administração (UnB)
-- Já desenvolveu projetos em áreas, como: empreendedorismo, gestão/políticas públicas, inovação na saúde
-- Há aproximadamente dois anos tem utilizado R rotineiramente em suas atividades de trabalho e  ministrado cursos para a comunidade de R 
-
-```{r gatas, figures-side, fig.show="hold", echo=FALSE, out.height="70%", out.width="80%", fig.align='center', fig.height=3, fig.cap=" "}
-
-knitr::include_graphics("imagem/trabalho.png")
-
-```
----
 class: inverse, middle, left
 # Divisão do curso 
 * **Módulo 1: conceitos básicos de R** 
@@ -54,49 +42,36 @@ class: inverse, middle, left
 ---
 class: inverse, middle, left
 # Objetivos do módulo 1
-- Demonstrar a relevância do uso do R 
-- Aplicar operações básicas 
-- Descrever tipos de objetos 
-- Descrever tipos de variáveis 
+- Demonstrar relevância do GEM
+- Explorar variáveis disponíveis no GEM 
 - Aplicar funções para manipular dataframes 
-- Aplicar funções para visualização de dados
+- Aplicar análise exploratória dos dados
 
 ---
-# Por que usar o R?
+# Global  Entrepreneurship Monitor 
 
-```{r why_r, echo=FALSE, out.height="80%", out.width="80%",fig.align='center'}
-knitr::include_graphics("https://media.giphy.com/media/WMODmi5AX9ZEQ/giphy.gif")
+#### - O [GEM](https://www.gemconsortium.org/) foi criado em 1999 como um projeto conjunto entre a Babson College e a London Business School
 
-```
----
+#### - Pesquisas focam em atitudes/comportamento empreendedor bem como ecossistemas de empreendedorismo
 
-# O R me dá medo 
+#### - Levantamentos são realizados com empreendedores e especialistas 
 
-Nunca programei... vou conseguir?
-
+#### - Divulgação de relatórios anuais sobre o empreendedorismo pelo mundo, por cada país e relatórios temáticos (ex.: [Impactos da Covid-19 no empreendedorismo](https://www.gemconsortium.org/reports/covid-impact-report))
+<br>
 ```{r r_spss, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3, fig.cap=" "}
 
-knitr::include_graphics("imagem/r_spss.png")
+knitr::include_graphics("imagem/GEM_Logo.jpg")
 ```
-
-
-"Não consigo entender esse bando de código..."
-
-
-"É tão mais fácil usar o SPSS que basta alguns cliques e me gera resultados rapidamente..."
-
-
-"Toda vez que tento usar R é erro para cá, erro para lá..." 
 
 ---
-# R e ciência de dados
+# Bases do GEM
 
-```{r linguagens, figures-side, fig.show="hold", echo=FALSE, out.height="70%", out.width="90%", fig.align='center', fig.height=1, fig.cap=" "}
+```{r linguagens, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3, fig.cap=" "}
 
-knitr::include_graphics("imagem/linguagens.png")
+knitr::include_graphics("imagem/gem_bases.png")
 ```
 
-fonte: [Towards data science](https://towardsdatascience.com/training-your-staff-in-data-science-heres-how-to-pick-the-right-programming-language-dda349354b18)
+fonte: [Base de conhecimento do GEM](http://gem-consortium.ns-client.xyz/about/wiki)
 
 ---
 
@@ -191,22 +166,6 @@ imc <- pesos/alturas**2
 imc
 ```
 ---
-
-# Daniel, consigo arredondar?
-
-Consegue! 
-
-```{r round, message=FALSE, warning=FALSE}
-
-help(round)
-round(imc, 2)
-imc <- round(imc, 2) #estou sobrescrevendo um vetor
-                     # arredondado sobre ele mesmo
-imc
-
-```
----
-
 # Matrizes 
 As **matrizes** possui uma estrutura tabular, com linhas e colunas. Porém, semelhante ao vetor, todos os objetos devem ser de um mesmo tipo (ex.: tudo número, tudo caracter). 
 
