@@ -47,7 +47,7 @@ class: inverse, middle, left
 
 ---
 class: inverse, middle, left
-# Objetivos do módulo 1
+# Objetivos do módulo 2
 - Demonstrar relevância do GEM
 - Explorar variáveis disponíveis no GEM 
 - Aplicar funções para manipular dataframes 
@@ -65,6 +65,20 @@ class: inverse, middle, left
 #### - Divulgação de relatórios anuais sobre o empreendedorismo pelo mundo, por cada país e relatórios temáticos (ex.: [Impactos da Covid-19 no empreendedorismo](https://www.gemconsortium.org/reports/covid-impact-report))
 &lt;br&gt;
 &lt;img src="imagem/GEM_Logo.jpg" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Global  Entrepreneurship Monitor 
+
+#### - Os microdados do GEM ficam disponíveis após três anos. Porém, no [site](http://gem-consortium.ns-client.xyz/data) é possível acessá-los 
+
+#### - Para esse curso serão apresentados dados consolidados por países, disponível também no site 
+
+#### - Tratar os microdados exigiria mais tempo e nivelamento em estatística para trabalhar com bases de amostragem complexa
+
+
+&lt;br&gt;
+&lt;img src="imagem/GEM_Logo.jpg" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
 ---
 # GEM e pesquisas
 
@@ -96,25 +110,168 @@ fonte: [Base de conhecimento - framework](http://gem-consortium.ns-client.xyz/wi
 fonte: [Base de conhecimento do GEM](http://gem-consortium.ns-client.xyz/about/wiki)
 
 ---
-# Literatura científica 
+# Base de especialistas
+A base de especialistas do GEM contempla diferentes dimensões: 
 
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="imagem/analytics-capabilities.png" alt=" " width="100%" height="100%" /&gt;
-&lt;p class="caption"&gt; &lt;/p&gt;
-&lt;/div&gt;
+* **Finanças empreendedoras**: disponibilidade de diferentes fontes de finanças para pequenas e médias empresas (PMEs)
+* **Políticas governamentais**: o quanto as políticas públicas contribuem para o empreendedorismo
+  + O quanto empreendedorismo é importante como uma política de governo
+  + O quanto impostos e burocracia afetam empreendedorismo
+* **Programas governamentais para empreendedorismo**: presença de programas governamentais para empreendedorismo 
+* **Educação empreendedora**: presença de treinamentos sobre criação e gerenciamento de PMEs em diferentes graus de ensino
+  + Nível básico 
+  + Nível Superior
+* **Transferência de Pesquisa &amp; Desenvolvimento (P&amp;D)**: o quanto que pesquisas nacionais conduzem a criação de oportunidades comerciais e estão disponíveis para PMEs
 
 ---
+# Base de especialistas 
 
-# Na área de empreendedorismo
+* **Infraestrutura legal e comercial**: presença de serviços e instituições que fornecem suporte a PMEs 
+* **Regulação de entrada**: que é dividido em a) dinamismo de mercado - o quanto que o mercado muda de ano a ano; b) abertura de mercado - o quanto novas empresas são livres para entrar em mercados existentes 
+* **Infraestrutura física**: facilidade de acessar recursos físicos (ex.: comunicação, logística, espaço físico)
+* **Cultura e normas sociais**: o quanto normas sociais e culturais encorajam novos métodos de negócios que podem gerar riqueza e renda de uma pessoa 
 
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="imagem/sbe.png" alt=" " width="80%" height="80%" /&gt;
-&lt;p class="caption"&gt; &lt;/p&gt;
-&lt;/div&gt;
+Vamos começar lendo a base a partir do meu repositório do github: 
+
+
+```r
+library(readr); library(dplyr); library(skimr)
+library(ggplot2); library(ggrepel); library(directlabels)
+library(GGally)
+
+gem_especialistas &lt;- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_nes_historico.csv", ";", escape_double = FALSE, trim_ws = TRUE)
+```
 ---
-class: inverse, middle, center
+# Explorando a base 
 
-# Conceitos básicos de R
+
+```r
+# Vamos usar o glimpse para conferir a base 
+glimpse(gem_especialistas)
+```
+
+```
+## Rows: 649
+## Columns: 15
+## $ code                                   &lt;dbl&gt; 244, 43, 55, 226, 56, 57, 385, ~
+## $ economy                                &lt;chr&gt; "Angola", "Austria", "Brazil", ~
+## $ year                                   &lt;dbl&gt; 2020, 2020, 2020, 2020, 2020, 2~
+## $ financing                              &lt;dbl&gt; 2.18, 2.88, 2.73, 1.95, 2.17, 2~
+## $ gov_support                            &lt;dbl&gt; 2.50, 2.79, 2.36, 2.16, 2.54, 2~
+## $ taxes_bureaucracy                      &lt;dbl&gt; 1.98, 2.53, 1.85, 2.34, 2.78, 2~
+## $ gov_programs                           &lt;dbl&gt; 2.00, 3.60, 2.56, 2.35, 3.02, 2~
+## $ basic_school_entrepreneurship          &lt;dbl&gt; 1.93, 1.74, 1.94, 1.55, 1.82, 2~
+## $ post_school_entrepreneurship           &lt;dbl&gt; 2.20, 2.67, 2.73, 2.25, 2.81, 3~
+## $ rd_transfer                            &lt;dbl&gt; 1.74, 2.77, 2.16, 2.04, 2.40, 2~
+## $ commercial_professional_infraestruture &lt;dbl&gt; 2.14, 3.27, 2.79, 2.89, 2.82, 2~
+## $ internal_market_dynamics               &lt;dbl&gt; 3.07, 2.70, 3.73, 2.47, 2.66, 2~
+## $ internal_market_openess                &lt;dbl&gt; 2.09, 3.34, 2.55, 2.25, 2.23, 2~
+## $ physical_infrastructure                &lt;dbl&gt; 2.23, 4.20, 3.40, 2.76, 3.99, 3~
+## $ cultural_social_norms                  &lt;dbl&gt; 2.85, 2.63, 2.89, 2.60, 3.05, 3~
+```
+---
+# Explorando base de especialistas
+Vamos baixar a base e comparar alguns países: Brasil, Chile, Colômbia e México. 
+
+Além disso, vamos separar algumas variáveis de interesse: `economy`, `year`, `gov_support`, `taxes_bureaucracy`, `gov_programs`, `internal_market_dynamics`.
+&lt;br&gt;
+
+
+```r
+paises &lt;- c("Brazil","Chile","Colombia","Mexico")
+
+
+gem_paises_selecionados &lt;- gem_especialistas %&gt;% 
+                              filter(economy %in% paises) %&gt;% 
+                              select(economy, year, gov_support, taxes_bureaucracy, 
+                                     gov_programs, internal_market_dynamics)
+
+# Estatísticas descritivas
+gem_paises_selecionados %&gt;%
+  select(-year) %&gt;% 
+  group_by(economy) %&gt;% 
+  skim() 
+```
+---
+# Plotando variáveis 
+
+Vamos investigar a variável `gov_support` dos países ao longo do tempo. 
+
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support)) + geom_line() 
+```
+
+&lt;img src="index_files/figure-html/ggplot0-1.png" style="display: block; margin: auto;" /&gt;
+---
+# Adicionando o parâmetro col 
+Vamos ainda adicionar destacar mais a linha e retirar esse fundo cinza
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  theme_minimal()
+```
+
+&lt;img src="index_files/figure-html/ggplot1-1.png" style="display: block; margin: auto;" /&gt;
+---
+# Adicionando títulos
+
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") +
+  ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
+```
+
+&lt;img src="index_files/figure-html/ggplot2-1.png" style="display: block; margin: auto;" /&gt;
+---
+# Função geom_dl() 
+
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points", "last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") +
+  ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
+```
+
+&lt;img src="index_files/figure-html/ggplot3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Aumentando fontes
+Vamos aumentar as fontes e retirar a legenda
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points", "last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") + theme(legend.position = "none") +
+  theme(plot.title = element_text(size=22)) + theme(axis.title.y = element_text(size = rel(1.2), angle = 90)) + theme(axis.title.x = element_text(size = rel(1.2), angle = 0)) + ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
+```
+
+&lt;img src="index_files/figure-html/ggplot4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Aumentando fontes
+Vamos aumentar as fontes e retirar a legenda
+
+```r
+gem_paises_selecionados %&gt;% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points", "last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") + theme(legend.position = "none") +
+  theme(plot.title = element_text(size=22)) + theme(axis.title.y = element_text(size = rel(1.2), angle = 90)) + theme(axis.title.x = element_text(size = rel(1.2), angle = 0)) + ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, Colombia e México - Dados GEM") +
+scale_x_continuous(breaks = seq(2010,2020,1)) 
+```
+
+&lt;img src="index_files/figure-html/ggplot5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Explorando dados de APS
 
 
 ---
