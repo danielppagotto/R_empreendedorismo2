@@ -75,7 +75,7 @@ class: inverse, middle, left
 
 #### - Tratar os microdados exigiria mais tempo e nivelamento em estatística para trabalhar com bases de amostragem complexa
 
-
+#### - Os relatórios sobre o Brasil podem ser acessados no site do Instituto Brasileiro de Qualidade e Produtividade por deste [link](https://ibqp.org.br/gem/download/).  
 &lt;br&gt;
 &lt;img src="imagem/GEM_Logo.jpg" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
 
@@ -142,7 +142,7 @@ library(GGally)
 gem_especialistas &lt;- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_nes_historico.csv", ";", escape_double = FALSE, trim_ws = TRUE)
 ```
 ---
-# Explorando a base 
+# Compreendendo as variáveis da base 
 
 
 ```r
@@ -228,7 +228,7 @@ gem_paises_selecionados %&gt;%
 
 &lt;img src="index_files/figure-html/ggplot2-1.png" style="display: block; margin: auto;" /&gt;
 ---
-# Função geom_dl() 
+# Adicionando textos às linhas 
 
 
 ```r
@@ -256,7 +256,7 @@ gem_paises_selecionados %&gt;%
 &lt;img src="index_files/figure-html/ggplot4-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Aumentando fontes
+# Mudando a escala
 Vamos aumentar as fontes e retirar a legenda
 
 ```r
@@ -269,9 +269,49 @@ scale_x_continuous(breaks = seq(2010,2020,1))
 ```
 
 &lt;img src="index_files/figure-html/ggplot5-1.png" style="display: block; margin: auto;" /&gt;
+---
+# Exercício de fixação 
 
+#### Tente fazer o mesmo exercício para outras variáveis, outros países e outros espaços temporais 
+
+&lt;img src="https://media.giphy.com/media/H1f1T0tKK4jEfNt6MG/giphy.gif" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+&lt;br&gt;
+Fonte: [giphy](https://media.giphy.com/media/H1f1T0tKK4jEfNt6MG/giphy.gif)
 ---
 # Explorando dados de APS
+Os dados consolidados do levantamento com população adulta é composto pelas seguintes variáveis: 
+
+* **Taxa de Oportunidades Percebidas**: Percentual de indivíduos de 18 a 64 anos (exceto aqueles envolvidos em algum estágio de atividade empreendedora) que enxergam boas oportunidades para se iniciar um negócio na área onde vivem. 
+
+* **Taxa de atividade empreendedora total (TAE)**: Percentual da população de 18 a 64 anos que é um empreendedor nascente ou proprietário-gerente de um novo negócio.
+
+* **Medo de fracassar**: Percentual da população de 18 a 64 anos (indivíduos envolvidos em qualquer estágio da atividade empresarial excluídos) que indicam que o medo do fracasso os impedem de abrir um negócio.
+
+* **Empreendedorismo como boa escolha de carreira**: Percentual da população de 18 a 64 anos que concorda com a afirmação de que, em seu país, a maioria das pessoas considera iniciar um negócio como uma escolha de carreira desejável.
+
+Para conhecer todas acesse [aqui](https://www.gemconsortium.org/wiki/1154). 
+
+---
+# Associando o GEM a outras bases 
+
+Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI) que pode ser acessada por meio da seguinte [página](https://info.worldbank.org/governance/wgi/). 
+
+### *"Governança consiste na tradição e nas instituições pelas quais a autoridade em um país é exercida. Isso inclui o processo pelo qual um governante é escolhido, monitorado e substituído; a capacidade do governo formular efetivamente e implementar políticas sólidas; e o respeito dos cidadãos e do Estado pelas instituições que regem as interações econômicas e sociais entre eles."* (WGI)
+
+As variáveis variam entre -2,5 (fraco índice de governança) a 2,5 (forte índice de governança). Para fins didáticos, transformei o indicador para variar de 0 a 5 pontos.  
+
+---
+# Conhecendo variáveis do WGI
+
+* **Control of Corruption**: Reflete as percepções da extensão em que o poder público é exercido para ganho privado, incluindo formas insignificantes e grandes de corrupção, bem como a "captura" do Estado pelas elites e interesses privados.
+
+* **Rule of Law**: Reflete as percepções de até que ponto os agentes confiam e cumprem as regras da sociedade e, em particular, a qualidade da execução de contratos, direitos de propriedade, polícia e tribunais, bem como a probabilidade de crime e violência.
+
+* **Regulatory Quality**: Reflete a percepção da capacidade do governo de formular e implementar políticas e regulamentações sólidas que permitam e promovam o desenvolvimento do setor privado.
+
+* **Politicial Stability and Absence of Violence/Terrorism**: A Estabilidade Política e Ausência de Violência/Terrorismo mede as percepções da probabilidade de instabilidade política e/ou violência com motivação política, incluindo terrorismo.
+
+* **Voice and Accountability**: Reflete as percepções de até que ponto os cidadãos de um país podem participar da seleção de seu governo, bem como a liberdade de expressão, a liberdade de associação e a liberdade de mídia.
 
 
 ---
