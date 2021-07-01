@@ -298,7 +298,90 @@ As variáveis variam entre -2,5 (fraco índice de governança) a 2,5 (forte índ
 * **Politicial Stability and Absence of Violence/Terrorism**: A Estabilidade Política e Ausência de Violência/Terrorismo mede as percepções da probabilidade de instabilidade política e/ou violência com motivação política, incluindo terrorismo.
 
 * **Voice and Accountability**: Reflete as percepções de até que ponto os cidadãos de um país podem participar da seleção de seu governo, bem como a liberdade de expressão, a liberdade de associação e a liberdade de mídia.
+---
+# Juntando bases
 
+Vamos juntar as bases, selecionar as variáveis de interesse e, finalmente, inspecionar alguns dados de estatística descritiva por continente. 
+
+Lendo as bases a partir do GitHub
+```{r lendobasess, message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
+
+wgidataset <- read_csv("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/wgi.csv")
+
+gem_aps <- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_2019_aps.csv", ";", escape_double = FALSE, trim_ws = TRUE)
+
+gem_wgid <- gem_aps %>% 
+                  left_join(wgidataset, by = c("abrev" = "code")) %>% 
+                  select(economy, continent, tea, perceived_opportunities,
+                         fear_failure, established_ownership, 
+                         entrepreneurship_as_good_carrer_choice,
+                         corruption, rule_of_law, regulatory_quality, 
+                         political_stability, voice_accountability)
+
+
+gem_wgid %>%
+  group_by(continent) %>% 
+  skim() 
+```
+---
+# Estatística descritiva - GGally
+
+```{r ggally, message=FALSE, warning=FALSE, fig.align='center', fig.height=6.5, fig.width=7}
+gem_wgid %>% select(-economy,-continent) %>% 
+  ggpairs()
+```
+---
+# Explorando mais... 
+
+Vamos explorar mais a fundo a variável `Entrepreneurship as good carrer choice`. 
+
+```{r estabilidade, fig.height=5, message=FALSE, warning=FALSE, fig.align='center'}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point() + theme_minimal() + geom_smooth(method = "lm", se = FALSE)
+
+```
+---
+# e mais... 
+
+```{r estabilidade2, fig.height=5, message=FALSE, warning=FALSE, fig.align='center'}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point(aes(col = continent, size = 1.5)) + 
+  theme_minimal() + geom_text_repel(aes(label = economy)) + 
+  theme(legend.position = "none") + geom_smooth(method = "lm", se = FALSE)
+
+```
+---
+# Aplicando facet_grid()
+```{r estabilidade3, fig.height=5, message=FALSE, warning=FALSE, fig.align='center'}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point(aes(col = continent, size = 1.5)) + facet_grid(~continent) +
+  theme_minimal() + theme(legend.position = "none") + geom_smooth(method = "lm", se = FALSE)
+
+```
+---
+# Podemos voltar ao GGAlly
+Podemos fazer filtragem de um continente apenas e verificar o resultados das variáveis
+
+```{r ggally_europa, fig.align='center', fig.height=5, message=FALSE, warning=FALSE}
+gem_wgid %>% 
+  filter(continent == "Europa") %>% 
+  select(-economy,-continent) %>% 
+  ggpairs()
+```
+---
+# Exercício de fixação 
+
+#### Tente fazer o mesmo exercício para outras variáveis ou filtrando outro continente
+
+```{r homework2, echo=FALSE, out.height="50%", out.width="50%",fig.align='center'}
+knitr::include_graphics("https://media.giphy.com/media/H1f1T0tKK4jEfNt6MG/giphy.gif")
+
+```
+<br>
+Fonte: [giphy](https://media.giphy.com/media/H1f1T0tKK4jEfNt6MG/giphy.gif)
 
 ---
 class: inverse, middle, center
