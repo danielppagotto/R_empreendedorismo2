@@ -1,6 +1,6 @@
 ---
-title: "R aplicado a empreedendorismo"
-subtitle: "Usando o R para explorar GEM"
+title: "Introdução ao R aplicado a pesquisas em empreendedorismo"
+subtitle: "R aplicado ao Global Entrepreneurship Monitor"
 author: "Daniel Pagotto"
 contact: "danielppagotto@gmail.com"
 institute: "LAPEI/UFG e CIGETS/UFG"
