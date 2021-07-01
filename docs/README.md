@@ -1,2 +1,2 @@
-# R_empreendedorismo1
- Parte 1 do curso de R
+# R_empreendedorismo2
+ Parte 2 do curso de R
