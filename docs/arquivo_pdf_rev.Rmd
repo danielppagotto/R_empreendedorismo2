@@ -7,18 +7,13 @@ output:
 always_allow_html: true
 ---
 
-Esse é o caderno de Scripts do módulo 2. Para este módulo utilizaremos os seguintes pacotes. Confira a seguir: 
+Esse é o caderno de Scripts do módulo 2, no qual aplicaremos alguns conceitos de manipulação e visualização de dados do módulo 1 na base do Global Entrepreneurship Monitor (GEM). Antes de iniciar é importante assegurar que os seguintes pacotes estejam instalados: `readr, dplyr, skimr, gpplot2, ggrepel, directlabels, GGally`. Caso não tenha ainda, use `install.packages()` para baixá-los.
 
-* library(readr)
-* library(dplyr)
-* library(skimr)
-* library(ggplot2)
-* library(ggrepel)
-* library(directlabels)
-* library(GGally)
 ```{r set diretorio, message=FALSE, warning=FALSE, include=FALSE}
-setwd("~/Documentos Daiane/Curso R - testes")
+setwd("~/GitHub/R_empreendedorismo2/docs")
 ```
+
+Vamos carregar os pacotes que vamos usar ao longo da aula! 
 
 ```{r message=TRUE, include=FALSE}
 library(readr)
@@ -30,9 +25,15 @@ library(directlabels)
 library(GGally)
 ```
 
-# Base de especialistas
+# Sobre o GEM 
 
-A base de especialistas do GEM contempla diferentes dimensões:
+Desde 1999, o GEM realiza levantamentos para monitorar o empreendedorismo em diferentes países do mundo. Para isso, pesquisas com empreendedores e especialistas são anualmente realizadas para mapear elementos como o contexto empreendedor, comportamentos e atitudes empreendedoras. 
+
+O GEM possui duas bases essencialmente: 1) National Expert Survey (especialistas); 2) Adult Population Survey. Os microdados são acessiveis após três anos da sua aplicação. Porém, conseguimos acessar dados consolidados a partir do site do GEM. Para mais informações sobre os levantamentos, acesso aos dados e a relatórios de cada país, acesse a [página](https://www.gemconsortium.org/) do GEM.  
+
+# National Expert Survey (NES)
+
+A base NES do GEM contempla diferentes dimensões:
 
 * **Finanças empreendedoras**: disponibilidade de diferentes fontes de finanças para pequenas e médias empresas (PMEs).
 
@@ -56,6 +57,7 @@ A base de especialistas do GEM contempla diferentes dimensões:
 
 * **Cultura e normas sociais**: o quanto normas sociais e culturais encorajam novos métodos de negócios que podem gerar riqueza e renda de uma pessoa.
 
+Vamos fazer alguns estudos
 
 ## Lendo a base a partir do meu repositório do github 
 ```{r}
@@ -63,7 +65,7 @@ gem_especialistas <- read_delim("https://raw.githubusercontent.com/danielppagott
 ```
 
 ## Compreendendo as variáveis da base
-Vamos usar o `glimpse` para visualização dos dados na base.
+Vamos usar o `glimpse` para inspecionar os dados na base.
 
 ```{r}
 glimpse(gem_especialistas)
@@ -103,7 +105,7 @@ gem_paises_selecionados %>%
 ```
 
 ## Adicionando o parâmetro col 
-Vamos ainda adicionar e destacar mais as linhas, e retirar esse fundo cinza. 
+Vamos ainda adicionar e destacar as linhas por país e retirar esse fundo cinza. 
 
 ```{r}
 # a função col é usada aqui para colorir as linhas 
@@ -113,7 +115,7 @@ gem_paises_selecionados %>%
 ```
 
 ## Adicionando títulos
-Para adicionar título, vamos usar o `ggtitle`, além disso, iremos usar as funções `xlab` e `ylab`.
+Para adicionar título, vamos usar o `ggtitle`, além disso, iremos usar as funções `xlab` e `ylab` para mudar os nomes dos eixos x e y.
 
 ```{r}
 # Estamos definindo os rótulos do gráfico e adicionando  título.
@@ -125,11 +127,12 @@ gem_paises_selecionados %>%
 ```
 
 ## Adicionando textos às linhas
- 
+Vamos agora usar o pacote `directlabels` para adicionar o nome do país associado a cada linha. 
+
 ```{r}
 gem_paises_selecionados %>% 
   ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
-  geom_dl(aes(label = economy), method = list(dl.combine("first.points","last.points"))) +
+  geom_dl(aes(label = economy), method = list(dl.combine("last.points"),hjust = -0.1)) +
   theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") +
   ggtitle("Suporte Governamental", 
           "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
@@ -167,11 +170,11 @@ gem_paises_selecionados %>%
   theme(axis.title.x = element_text(size = rel(1.2), angle = 0)) + 
   ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, 
           Colombia e México - Dados GEM") +
-scale_x_continuous(breaks = seq(2010,2020,1))
+scale_x_continuous(breaks = seq(2010,2021,1)) 
 ```
 
-# Explorando dados de APS
-Os dados consolidados do levantamento com população adulta é composto pelas seguintes variáveis:
+# Explorando dados de Adult Population Survey
+Os dados consolidados do levantamento com população adulta é composto um conjunto amplo de variáveis. Para o presente exercício vamos usar as seguintes variáveis:
 
 * **Taxa de Oportunidades Percebidas**: Percentual de indivíduos de 18 a 64 anos (exceto aqueles envolvidos em algum estágio de atividade empreendedora) que enxergam boas oportunidades para se iniciar um negócio na área onde vivem.
 
@@ -182,7 +185,7 @@ Os dados consolidados do levantamento com população adulta é composto pelas s
 * **Empreendedorismo como boa escolha de carreira**: Percentual da população de 18 a 64 anos que concorda com a afirmação de que, em seu país, a maioria das pessoas considera iniciar um negócio como uma escolha de carreira desejável.
 
 # Associando o GEM a outras bases
-Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI) que pode ser acessada por meio da seguinte página.
+Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI) que pode ser acessada por meio da seguinte [página](https://info.worldbank.org/governance/wgi/). Antes de qualquer coisa, vamos ver a definição de governança conforme o WGI. 
 
 *"Governança consiste na tradição e nas instituições pelas quais a autoridade em um país é exercida. Isso inclui o processo pelo qual um governante é escolhido, monitorado e substituído; a capacidade do governo formular efetivamente e implementar políticas sólidas; e o respeito dos cidadãos e do Estado pelas instituições que regem as interações econômicas e sociais entre eles." (WGI)
 As variáveis variam entre -2,5 (fraco índice de governança) a 2,5 (forte índice de governança). Para fins didáticos, transformei o indicador para variar de 0 a 5 pontos.*
@@ -280,20 +283,6 @@ gem_wgid %>%
   ggpairs()
 ```
 
-
-# Para aprender mais
-
-Ao clicar será direcionad@ para a página indicada
-
-- [GGPlot2 cheat sheet](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
-- [GGPlot2 - LAPEI](https://www.youtube.com/watch?v=IPyjHKe30eo)
-- [Plotly](https://plotly.com/)
-- [Blog Datanovia](https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/)
-- [Datavis with R](https://rkabacoff.github.io/datavis/Interactive.html)
-- [Live Curso-R sobre extensões do ggplot2](https://www.youtube.com/watch?v=LXZhvWE2ne8&t=7267s)
-- [The R graph gallery](https://www.r-graph-gallery.com/)
-- [Documentação dplyr](https://cloud.r-project.org/web/packages/dplyr/dplyr.pdf)
-- [Documentação ggplot2](https://cloud.r-project.org/web/packages/ggplot2/ggplot2.pdf)
 
 # Obrigado
 ## Se encontrou algum erro ou tem alguma sugestão de melhoria pode entrar em contato. Se foi útil também avise! Ah... e pode passar adiante. Quanto mais gente tendo acesso a esse conhecimento melhor! 
