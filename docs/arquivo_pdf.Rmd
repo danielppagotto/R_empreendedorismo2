@@ -1,595 +1,285 @@
 ---
-title: "Cadernos de Scripts - módulo 1"
-author: "Daniel Pagotto e Fernanda Arantes (LAPEI-UFG)"
-date: "21/06/2021"
+title: "**Cadernos de Scripts - Módulo 2**"
+author: "Daniel Pagotto e Daiane Martins (LAPEI-UFG)"
 output: 
   pdf_document:
     latex_engine : xelatex
 always_allow_html: true
 ---
 
+Esse é o caderno de Scripts do módulo 2. Para este módulo utilizaremos os seguintes pacotes. Confira a seguir: 
+
+* library(readr)
+* library(dplyr)
+* library(skimr)
+* library(ggplot2)
+* library(ggrepel)
+* library(directlabels)
+* library(GGally)
 ```{r set diretorio, message=FALSE, warning=FALSE, include=FALSE}
-setwd("~/GitHub/R_empreendedorismo1/docs")
+setwd("~/Documentos Daiane/Curso R - testes")
 ```
 
-# Nivelando conhecimentos sobre R 
-Para começar nosso curso, vamos aplicar operações básicas com o R. Insira os códigos e rode (ctrl + Enter em cima da linha) para ver os resultados. 
-  
-```{r operacoes_basicas}
-# Operações básicas
-5 + 5
-10 - 6
-10*2
-5/2
-#potência
-5**2
-# raiz quadrada
-sqrt(16)
-# veja que os parênteses são usados para estabelecer uma ordem de operações, 
-# igual aprendemos na matemática
-5*(50-45)
-```
-  
-## Operações de atribuição 
-Atribuições são muito importantes! Usamos o "<-" para atribuir o resultado de uma operação a uma variável. É como se eu estivesse falando assim: "R, realize essa operação e guarde em um objeto chamado x"
-  
-```{r atribuicoes}
-
-#Atribuições
-x <- 5 + 5
-y <- 10 - 16
-a <- 9
-soma <- a + x
-nome <- "daniel"
-certo <- TRUE
-```
-
-## Operações básicas
-Vamos fazer um programinha para calcular meu índice de massa corpórea (IMC). 
-  
-```{r operacoes} 
-pesoDaniel <- 79
-alturaDaniel <- 1.78
-imcDaniel <- pesoDaniel/alturaDaniel**2
-```
-
-Agora calcule o IMC de todas as pessoas.
-```{r imc, figures-side, fig.show="hold", echo=FALSE, out.height="90%", out.width="90%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/imc.png")
-```
-
-Não existe um jeito mais fácil de calcular?
-
-## Vetores 
-  
-Você até pode calcular o IMC de cada um individualmente. 
-
-Mas vou apresentar uma forma de resolver - existem várias formas, usando função, loops. Mas vamos usar um tipo de objeto chamado **vetor**. O vetor é um conjunto unidimensional de objetos de um mesmo tipo (ex.: números, palavras). 
-
-Traduzindo... imagina uma tabela de excel formada por várias colunas. Uma das colunas é a idade e está expressa em número. Pronto, um vetor é como se fosse uma coluna com valores de um mesmo tipo.
-
-```{r vetores}
-# trabalhando com vetores. Basta colocar um c e abrir parênteses
-pesos <- c(65, 95, 75, 77, 80, 68)
-alturas <- c(1.60, 1.78, 1.80, 1.68, 1.72, 1.65)
-imc <- pesos/alturas**2
-imc
-```
-
-## Consigo arredondar os valores?
-  
-Consegue! Só usar a função round. 
-  
-```{r round, message=FALSE, warning=FALSE}
-
-# dica, a função help serve para você pedir uma ajudinha para o R e ver o que a 
-# função faz
-help(round)
-
-round(imc, 2)
-imc <- round(imc, 2) #estou sobrescrevendo um vetor
-                     # arredondado sobre ele mesmo
-imc
-
-```
-
-## Matrizes 
-  As **matrizes** possuem uma estrutura tabular, com linhas e colunas. Porém, semelhante ao vetor, todos os objetos devem ser de um mesmo tipo (ex.: tudo número, tudo caracter). 
-
-```{r matriz}
-Matriz<-cbind(pesos,alturas,imc)
-Matriz
-```
-
-Veja que tem uma aparência de tabela. Mas daqui em diante trabalharemos com outra estrutura chamada **dataframe**. Essa estrutura tem formato tabular e ainda permite que os objetos tenham tipos diferentes, ou seja, posso ter uma coluna numérica, outra no formato data, outra no formato de caracteres e assim por diante. 
-
-Existe um tipo de estrutura de dados chamado **lista** muito importante também. Mas entrar nele é assunto para um curso de R intermediário.  
-
-```{r matriz2}
-rownames(Matriz) <- c("Alice","Gilmar","Cecilia","Bianca","Valentina","Augusto")
-Matriz
-```
-
-# Introduzindo funções para manipulação de dados
-
-Aqui vamos começar a falar sobre manipulação de dados usando o pacote `dplyr`. É importante instalar os pacotes `dplyr` e `gapminder`, caso já não tenha feito, usando a função `install.packages("dplyr")`, assim como o pacote gapminder, que vai prover a base de dados para o curso. 
-
-## Inspecionando o dataframe
-  
-```{r inspecionando, message=FALSE, warning=FALSE}
-library(gapminder)
+```{r message=TRUE, include=FALSE}
+library(readr)
 library(dplyr)
-basePaises <- gapminder
-
-# inspecionando a estrutura da base
-str(basePaises)
-
-```
-
-```{r inspecionando2}
-# inspecionando as 6 primeiras observações 
-head(basePaises)
-
-```
-
-```{r inspecionando3}
-# inspecionando as 10 últimas observações
-tail(basePaises, n = 10)
-
-
-```
-
-```{r inspecionando4}
-# estatísticas descritivas da base
-summary(basePaises)
-```
-
-```{r inspecionando5}
-# Acessando uma variável da base
-head(basePaises$continent,20)
-```
-
-```{r inspecionando6, message=FALSE, warning=FALSE}
-# Acessando elementos únicos
-unique(basePaises$year)
-
-# Verificando a média do vetor de expectativa de vida
-mean(basePaises$lifeExp)
-
-# A função glimpse permite dar uma olhadinha nos dados. Parece muito com a 
-# função str(), mas é do pacote dplyr
-
-glimpse(basePaises)
-```
-
-## Abrindo um parêntese 
-
-Veja que o glimpse mostra o tipo das variáveis (int, fct, dbl). Existem vários tipos de variáveis no R e compreendê-los é importante, pois determinam possíveis visualizações e técnicas de análise. Apresentei três tipos importantes: 
-
-* dbl (double) - valores numéricos e contínuos ("quebrados")
-* int (integer) - valores numéricos discretos ("inteiros")
-* fct (factor) - uma palavra. 
-
-Se alguém a série Stranger Things, da Netflix, vai lembrar o nome dessa menininha: Eleven. Nesse caso, Eleven é um nome, portanto, representaria um factor. 
-
-
-```{r eleven, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/eleven.png")
-```
-
-## Função filter 
-
-Função para filtrar observações de uma base conforme algumas condições. Nesse caso, países cujo continente corresponde à Ásia. 
-
-```{r filter, message=FALSE, warning=FALSE, paged.print=TRUE}
-basePaises %>% 
-  filter(continent == "Asia")
-
-```
-  
-```{r filter2, message=FALSE, warning=FALSE, paged.print=TRUE}
-
-basePaises %>%
-  filter(continent == "Americas" & year>1990)
-
-```
-
-Nesse caso, precisamos de todas observações, com exceção do continente Oceania. Veja como fica:   
-
-```{r filter3, message=FALSE, warning=FALSE, paged.print=TRUE}
-# != diferente 
-basePaises %>%
-  filter(continent != "Oceania")
-
-# Você pode armazenar sua consulta em outro objeto
-baseAsia <- basePaises %>%
-  filter(continent == "Asia")
-```
-
-## Função select
-
-A função select é muito útil para você selecionar apenas as variáveis que precisa trabalhar. O PSED (base que usaremos no módulo 3) tem mais de 8000 colunas. É prudente usar a função select para separar apenas o que você precisa depois que tiver estudado os dados. 
-
-```{r select, message=FALSE, warning=FALSE}
-basePaises %>%
-  select(year,country,gdpPercap)
-
-```
-
-Quando usamos o `-` pegamos qualquer variável menos aquela de interesse, nesse caso lifeExp. 
-
-```{r select2, message=FALSE, warning=FALSE}
-
-basePaises %>%
-  select(-lifeExp)
-```
-
-## Função select + filter
-
-Olha que legal, as funções conversam entre si! Então eu posso fazer dois procedimentos - filtrar e depois selecionar - em um só conjunto de comandos. 
-  
-```{r select_filter}
-basePaises %>%
-  filter(continent == "Americas" & year>1990) %>%
-  select(year,country,gdpPercap)
-```
-
-## Função mutate 
-  
-A função mutate serve para criar uma nova variável. Nesse primeiro exemplo, criei uma variável chamada GDP (PIB), que é resultado da multiplicação entre as variáveis gdpPercap (PIB per capita) e pop (população). 
-
-```{r mutate}
-basePaises <- basePaises %>%
-  mutate(GDP = gdpPercap * pop)
-
-basePorte <- basePaises %>%
-  filter(year == 1992) %>%
-  mutate(porte = if_else(pop>median(pop),"G","P"))
-
-head(basePorte)
-
-```
-
-## Funções group_by e summarize 
-
-A função group_by geralmente é aplicada associada a outra função, nesse caso, vamos usar associada ao summarize.  
-
-```{r group_by}
-basePaises %>%
-  group_by(country) %>%
-  summarize(meanLE=mean(lifeExp),meanPop=mean(pop),meanGpc=mean(gdpPercap))
-
-```
-
-Veja como ela funciona: vamos agrupar todas as observações cuja variável *country* for a mesma e, em sequência, aplicar um cálculo de média sobre o agrupamento. 
-
-<br>
-```{r group_by, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/group_by.png")
-```
-
-Veja que posso agrupar usando mais de uma variável. Nesse caso, agrupamos todos as observações iguais de continente e ano. 
-
-```{r group_by2}
-
-basePaises %>%
-  group_by(continent,year) %>%
-  summarize(meanLE=mean(lifeExp),meanPop=mean(pop),meanGpc=mean(gdpPercap))
-```
-
-## Funções top_n e arrange
-A função top_n serve para selecionar os n maiores valores que desejar. Já a arrange permite ordenar em ordem descendente ou ascedente (padrão).
-
-```{r top_n}
-basePaises %>% 
-  filter(year == 2007) %>% 
-  top_n(5,pop) %>% 
-  arrange(desc(pop))
-
-```
-
-As próximas funções de manipulação são os joins, que servem para juntar duas bases. São funções importantíssimas. Vamos falar somente sobre dois tipos de joins (left_join e inner_join). Existem outros, mas esses são os que mais usamos no cotidiano. Para isso, vamos usar duas bases: o Índice de Cidades Empreendedoras (ICE), desenvolvido pela ENAP e Endeavor, e a base MUNIC do IBGE.  
-
-## Base ICE
-```{r ice, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/ice.png")
-```
-
-Fonte: [Índice de Cidades empreendedoras](https://ice.enap.gov.br/)
-
-## Base MUNIC
-```{r munic, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/munic.png")
-```
-
-Fonte: [MUNIC](https://www.ibge.gov.br/estatisticas/sociais/saude/10586-pesquisa-de-informacoes-basicas-municipais.html?=&t=o-que-e)
-
-## Baixando as bases direto do meu github
-  
-```{r munic}
-munic <- read.csv("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo1/main/arquivos%20de%20bases/politicas_empreendedorismo.csv",sep = ";", encoding = "UTF-8") %>% rename(cod_cidade = "X.U.FEFF.CodMun")
-
-ice <- read.csv("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo1/main/arquivos%20de%20bases/base_ice.csv",sep = ";", encoding = "UTF-8") %>% rename(cidade = "X.U.FEFF.cidade")
-```
-
-## Inspecionando as bases
-
-```{r inspec_munic}
-glimpse(munic)
-```
-
-```{r inspec_ice}
-glimpse(ice)
-```
-
-Vamos juntar as bases por meio das colunsa cod_cidade e cod_ibge. 
-
-Um ponto **muito importante**: ambas variáveis devem ser do mesmo tipo. No caso, ambas estão como `int`. Caso uma fosse factor e a outra `int`, o join geraria uma mensagem de erro. 
-
-Vamos supor que o cod_ibge da base ice estive em formato fct (factor, lembra da Eleven do Stranger Things). Para transformá-lo para o formato int seria necessário aplicar o seguinte comando. 
-
-```{r transformando int}
-ice$cod_ibge <- as.integer(ice$cod_ibge)
-```
-
-
-## inner_join 
-
-```{r inner, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/inner_join.png")
-```
-
-```{r}
-inner <- munic %>% 
-  inner_join(ice, by = c("cod_cidade"="cod_ibge"))
-```
-
-## left_join
-
-```{r left, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/left_join.png")
-```
-
-```{r}
-left <- munic %>% 
-  left_join(ice, by = c("cod_cidade"="cod_ibge"))
-```
-
-# Introduzindo funções para visualização de dados
-
-## Dica de leitura 
-  
-```{r livro, figures-side, fig.show="hold", echo=FALSE, out.height="30%", out.width="40%", fig.align='center', fig.height=3}
-
-knitr::include_graphics("imagem/storytelling.jpg")
-
-```
-
-## Preparando nosso ambiente
-  
-Antes de começar, vamos chamar alguns pacotes e preparar uma base que usaremos! Caso ainda não tenha algum dos pacotes abaixo, terá que instalar usando o comando `install.packages("nome do pacote")`.
-
-```{r inicializar, echo=TRUE, message=FALSE, warning=FALSE}
+library(skimr)
 library(ggplot2)
-library(dplyr)
-library(gapminder)
-
-base <- gapminder %>% 
-  filter(year == 2007) 
-
-glimpse(base)
+library(ggrepel)
+library(directlabels)
+library(GGally)
 ```
 
+# Base de especialistas
 
-## GGPlot2 - a base de tudo
-O R por si só possui funções para gerar gráficos, porém o ggplot2 é um pacote que fornece um conjunto bem extenso de possibilidades 
+A base de especialistas do GEM contempla diferentes dimensões:
 
-```{r histograma1, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=6, fig.width=6}
+* **Finanças empreendedoras**: disponibilidade de diferentes fontes de finanças para pequenas e médias empresas (PMEs).
 
-hist(base$lifeExp)
-
-```
-
-Vamos criar um histograma sobre a variável expectativa de vida. 
-
-```{r histograma2, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=6, fig.width=6}
-
-ggplot(base, aes(x = lifeExp)) + geom_histogram()
-
-```
-
-## Densidade
-Vamos criar um gráfico de densidade sobre a variável expectativa de vida. Veja outra forma de usar a função ggplot. 
-
-```{r densidade, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=6, fig.width=6}
-
-base %>% 
-  ggplot(aes(x = lifeExp)) + geom_density()
-
-```
-
-## Boxplot
+* **Políticas governamentais**: o quanto as políticas públicas contribuem para o empreendedorismo:
+  - O quanto empreendedorismo é importante como uma política de governo
+  - O quanto impostos e burocracia afetam empreendedorismo
   
-Vamos criar um boxplot sobre a variável expectativa de vida. 
+* **Programas governamentais para empreendedorismo**: presença de programas governamentais para empreendedorismo.
 
-```{r boxplot1, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=6, fig.width=6}
-
-base %>% 
-  ggplot(aes(y = lifeExp)) + geom_boxplot()
-
-```
-
-Vamos criar outro boxplot sobre a variável expectativa de vida. 
-
-```{r boxplot2, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=6, fig.width=6}
-
-base %>% 
-  ggplot(aes(x = continent, y = lifeExp)) + geom_boxplot()
-
-```
-
-## Gráfico de colunas 
+* **Educação empreendedora**: presença de treinamentos sobre criação e gerenciamento de PMEs em diferentes graus de ensino:
+  - Nível básico
+  - Nível Superior
   
-Vamos criar um gráfico de barras da variável expectativa de vida. Nesse caso, vamos manter os 10 países da Ásia com maior taxa de expectativa de vida. 
+* **Transferência de Pesquisa & Desenvolvimento (P&D)**: o quanto que pesquisas nacionais conduzem a criação de oportunidades comerciais e estão disponíveis para PMEs.
 
-```{r barras, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=5, fig.width=4}
-base %>% 
-  filter(continent == "Asia") %>% 
-  top_n(n = 10, wt = lifeExp) %>% 
-  ggplot(aes(x = country, y = lifeExp)) + geom_col() 
+* **Infraestrutura legal e comercial**: presença de serviços e instituições que fornecem suporte a PMEs.
+
+* **Regulação de entrada**: que é dividido em a) dinamismo de mercado - o quanto que o mercado muda de ano a ano; b) abertura de mercado - o quanto novas empresas são livres para entrar em mercados existentes.
+
+* **Infraestrutura física**: facilidade de acessar recursos físicos (ex.: comunicação, logística, espaço físico).
+
+* **Cultura e normas sociais**: o quanto normas sociais e culturais encorajam novos métodos de negócios que podem gerar riqueza e renda de uma pessoa.
+
+
+## Lendo a base a partir do meu repositório do github 
+```{r}
+gem_especialistas <- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_nes_historico.csv", ";",escape_double = FALSE, trim_ws = TRUE)
 ```
 
-## Coord_flip
+## Compreendendo as variáveis da base
+Vamos usar o `glimpse` para visualização dos dados na base.
+
+```{r}
+glimpse(gem_especialistas)
+```
+
+## Explorando base de especialistas
+Vamos baixar a base e comparar alguns países: **Brasil**, **Chile**, **Colômbia** e **México**.
+
+```{r}
+paises <- c("Brazil","Chile","Colombia","Mexico")
+```
+
+Além disso, vamos separar algumas variáveis de interesse: `economy, year, gov_support, taxes_bureaucracy, gov_programs, internal_market_dynamics`.
+
+```{r}
+gem_paises_selecionados <- gem_especialistas %>% 
+                              filter(economy %in% paises) %>% 
+                              select(economy, year, gov_support, taxes_bureaucracy, 
+                                     gov_programs, internal_market_dynamics)
+```
+
+## Estatísticas descritivas
+
+```{r message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
+gem_paises_selecionados %>%
+  select(-year) %>% 
+  group_by(economy) %>% 
+  skim()
+```
+
+## Plotando variáveis
+Vamos investigar a variável `gov_support` dos países ao longo do tempo.
+
+```{r}
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support)) + geom_line()
+```
+
+## Adicionando o parâmetro col 
+Vamos ainda adicionar e destacar mais as linhas, e retirar esse fundo cinza. 
+
+```{r}
+# a função col é usada aqui para colorir as linhas 
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  theme_minimal()
+```
+
+## Adicionando títulos
+Para adicionar título, vamos usar o `ggtitle`, além disso, iremos usar as funções `xlab` e `ylab`.
+
+```{r}
+# Estamos definindo os rótulos do gráfico e adicionando  título.
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") +
+  ggtitle("Suporte Governamental", 
+          "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
+```
+
+## Adicionando textos às linhas
+ 
+```{r}
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points","last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") +
+  ggtitle("Suporte Governamental", 
+          "Comparação entre Brasil, Chile, Colombia e México - Dados GEM")
+```
+ 
+## Aumentando fontes
+Vamos aumentar as fontes e retirar a legenda usando a função `theme`.
+
+```{r}
+# Estamos usando a funcao theme para modificar alguns elementos do grafico.
+# Neste caso, o tamanho da fonte e retirando a legenda.
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points", "last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") + 
+  theme(legend.position = "none") +
+  theme(plot.title = element_text(size=22)) + 
+  theme(axis.title.y = element_text(size = rel(1.2), angle = 90)) +
+  theme(axis.title.x = element_text(size = rel(1.2), angle = 0)) + 
+  ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, 
+          Colombia e México - Dados GEM")
+```
+
+## Mudando a escala
+Além de aumentar as fontes e retirar a legenda, vamos também usar o argumento `scale_x_continuous` para mudar a escala com o parâmentro `breaks`. 
+
+```{r}
+gem_paises_selecionados %>% 
+  ggplot(aes(year,gov_support, col = economy)) + geom_line(size = 2) +
+  geom_dl(aes(label = economy), method = list(dl.combine("first.points","last.points"))) +
+  theme_minimal() + xlab("Ano") + ylab("Suporte Governamental") + 
+  theme(legend.position = "none") +
+  theme(plot.title = element_text(size=22)) + 
+  theme(axis.title.y = element_text(size = rel(1.2), angle = 90)) + 
+  theme(axis.title.x = element_text(size = rel(1.2), angle = 0)) + 
+  ggtitle("Suporte Governamental", "Comparação entre Brasil, Chile, 
+          Colombia e México - Dados GEM") +
+scale_x_continuous(breaks = seq(2010,2020,1))
+```
+
+# Explorando dados de APS
+Os dados consolidados do levantamento com população adulta é composto pelas seguintes variáveis:
+
+* **Taxa de Oportunidades Percebidas**: Percentual de indivíduos de 18 a 64 anos (exceto aqueles envolvidos em algum estágio de atividade empreendedora) que enxergam boas oportunidades para se iniciar um negócio na área onde vivem.
+
+* **Taxa de atividade empreendedora total (TAE)**: Percentual da população de 18 a 64 anos que é um empreendedor nascente ou proprietário-gerente de um novo negócio.
+
+* **Medo de fracassar**: Percentual da população de 18 a 64 anos (indivíduos envolvidos em qualquer estágio da atividade empresarial excluídos) que indicam que o medo do fracasso os impedem de abrir um negócio.
+
+* **Empreendedorismo como boa escolha de carreira**: Percentual da população de 18 a 64 anos que concorda com a afirmação de que, em seu país, a maioria das pessoas considera iniciar um negócio como uma escolha de carreira desejável.
+
+# Associando o GEM a outras bases
+Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI) que pode ser acessada por meio da seguinte página.
+
+*"Governança consiste na tradição e nas instituições pelas quais a autoridade em um país é exercida. Isso inclui o processo pelo qual um governante é escolhido, monitorado e substituído; a capacidade do governo formular efetivamente e implementar políticas sólidas; e o respeito dos cidadãos e do Estado pelas instituições que regem as interações econômicas e sociais entre eles." (WGI)
+As variáveis variam entre -2,5 (fraco índice de governança) a 2,5 (forte índice de governança). Para fins didáticos, transformei o indicador para variar de 0 a 5 pontos.*
+
+# Conhecendo variáveis do WGI
+* **Control of Corruption**: Reflete as percepções da extensão em que o poder público é exercido para ganho privado, incluindo formas insignificantes e grandes de corrupção, bem como a "captura" do Estado pelas elites e interesses privados.
+
+* **Rule of Law**: Reflete as percepções de até que ponto os agentes confiam e cumprem as regras da sociedade e, em particular, a qualidade da execução de contratos, direitos de propriedade, polícia e tribunais, bem como a probabilidade de crime e violência.
+
+* **Regulatory Quality**: Reflete a percepção da capacidade do governo de formular e implementar políticas e regulamentações sólidas que permitam e promovam o desenvolvimento do setor privado.
+
+* **Politicial Stability and Absence of Violence/Terrorism**: A Estabilidade Política e Ausência de Violência/Terrorismo mede as percepções da probabilidade de instabilidade política e/ou violência com motivação política, incluindo terrorismo.
+
+* **Voice and Accountability**: Reflete as percepções de até que ponto os cidadãos de um país podem participar da seleção de seu governo, bem como a liberdade de expressão, a liberdade de associação e a liberdade de mídia.
+
+# Juntando bases
+
+## Lendo as bases do WGI e do GEM a partir do GitHub
+
+```{r}
+#Base do WGI:
+wgidataset <- read_csv("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/wgi.csv")
+```
+
+```{r}
+#Base do GEM:
+gem_aps <- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_2019_aps.csv", ";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+Com este comando iremos selecionar as variáveis de interesse.
+
+```{r}
+gem_wgid <- gem_aps %>% 
+                  left_join(wgidataset, by = c("abrev" = "code")) %>% 
+                  select(economy, continent, tea, perceived_opportunities,
+                         fear_failure, established_ownership, 
+                         entrepreneurship_as_good_carrer_choice,
+                         corruption, rule_of_law, regulatory_quality, 
+                         political_stability, voice_accountability)
+```
+
+E finalmente, vamos inspecionar alguns dados de estatística descritiva por continente.
+
+```{r filte_gem, message=FALSE, warning=FALSE, echo=TRUE, results='hide'}
+gem_wgid %>%
+  group_by(continent) %>% 
+  skim()
+```
+
+
+## Estatística descritiva - GGally
+Nessa etapa vamos usar a função do pacote `GGally` chamada `ggpairs`.
+
+```{r}
+gem_wgid %>% select(-economy,-continent) %>% 
+  ggpairs()
+```
+
+Podemos ir um pouco além e explorar mais, por exemplo, a variável `Entrepreneurship as good carrer choice`.
+
+```{r}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point() + theme_minimal() + geom_smooth(method = "lm", se = FALSE)
+```
+
+
+```{r}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point(aes(col = continent, size = 1.5)) + 
+  theme_minimal() + geom_text_repel(aes(label = economy)) + 
+  theme(legend.position = "none") + geom_smooth(method = "lm", se = FALSE)
+```
+
   
-Veja como melhorar a visualização com um simples argumento:
+## Aplicando `facet_grid()`
+Não para por aí, agora vamos usar o `facet_grid` para formar uma matriz de painéis.
 
-```{r barras2, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=5, fig.width=4}
-base %>% 
-  filter(continent == "Asia") %>% 
-  top_n(n = 10, wt = lifeExp) %>% 
-  ggplot(aes(x = country, y = lifeExp)) + geom_col() + coord_flip()
+```{r}
+gem_wgid %>% 
+  ggplot(aes(x = political_stability, y = entrepreneurship_as_good_carrer_choice)) +
+  geom_point(aes(col = continent, size = 1.5)) + facet_grid(~continent) +
+  theme_minimal() + theme(legend.position = "none") + geom_smooth(method = "lm", se = FALSE)
 ```
 
-## Mas consigo deixar em ordem?
-Sim, para isso, vamos usar uma função do pacote forcats.
+## Podemos voltar ao GGAlly
+Podemos filtrar um continente apenas e verificar o resultados das variáveis.
 
-```{r barras3, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=4, fig.width=6}
-library(forcats)
-base %>% 
-  filter(continent == "Asia") %>% 
-  top_n(n = 10, wt = lifeExp) %>% 
-  ggplot(aes(x = fct_reorder(country,lifeExp), y = lifeExp)) + geom_col() + coord_flip()
+```{r}
+#vamos pegar como exemplo a Europa. 
+gem_wgid %>% 
+  filter(continent == "Europa") %>% 
+  select(-economy,-continent) %>% 
+  ggpairs()
 ```
 
-## Labels
-Adicionando labels 
-
-```{r barras4, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=5, fig.width=4}
-base %>% 
-  filter(continent == "Asia") %>% 
-  top_n(n = 10, wt = lifeExp) %>% 
-  ggplot(aes(x = fct_reorder(country,lifeExp), y = lifeExp)) + geom_col() + 
-  geom_label(aes(label=round(lifeExp))) +  coord_flip()
-```
-
-## Linhas
-Para fazer esse gráfico, vamos usar a base original, gapminder, e filtrar apenas o Brasil. 
-
-```{r linhas, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=5, fig.width=6}
-gapminder %>% 
-  filter(country == "Brazil") %>% 
-  ggplot(aes(x = year, y = lifeExp)) + geom_line() 
-```
-
-## Argumento col
-Veja que legal é o argumento col dentro do `aes`! Nesse caso pegamos Brasil e Argentina. Olha como estamos filtrando... Primeiro criamos um vetor com o nome dos países e depois aplicamos o filter usando o `%in`.
-
-```{r linhas2, echo=TRUE, message=FALSE, warning=FALSE,fig.align='center', fig.height=5, fig.width=6}
-paises <- c("Brazil","Argentina")
-gapminder %>% 
-  filter(country %in% paises) %>% 
-  ggplot(aes(x = year, y = lifeExp, col = country)) + geom_line() 
-```
-
-## Usando argumento fill 
-Vamos ver como funciona o argumento `fill`.
-
-```{r densidade_customizada2, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=6.5, message=FALSE, warning=FALSE}
-base %>% 
-  top_n(10) %>% 
-  ggplot(aes(x = fct_reorder(country,gdpPercap), y=gdpPercap, fill = continent)) + geom_col() + coord_flip()
-```
-
-## Podemos customizar mais elementos? 
-
-```{r densidade customizada, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=5.5, message=FALSE, warning=FALSE}
-ggplot(base,aes(x=lifeExp)) + geom_density(fill="darkblue") +
-  labs(title = "Histograma da expectativa de vida", 
-       x = "Expectativa de vida", y = "Frequência") + theme_minimal()
-```
-
-Dá para customizar uma muitos outros elementos: cores de fundo, de linhas, tamanho de letras, posição da legenda e assim por diante. 
-
-## Vamos trabalhar com duas variáveis 
-Vamos relacionar duas variáveis: PIB per capita e expectativa de vida 
-
-```{r scatter, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=6.5, message=FALSE, warning=FALSE}
-ggplot(base,aes(x=log(gdpPercap),y=lifeExp)) + geom_point() +
-  labs(x = "PIB per capita (log)", y = "Expectativa de vida") + theme_bw()
-```
-
-## Mais uma camada
-  
-```{r scatter2, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=5.5, message=FALSE, warning=FALSE}
-ggplot(base,aes(y=lifeExp, x=log(gdpPercap))) + geom_point() +
-  geom_smooth(method = "lm", se=FALSE) + 
-  labs(x = "PIB per capita (log)",
-       y = "Expectativa de vida") + theme_bw()
-```
-
-## Argumento col 
-  
-```{r scatter3, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=5.5, message=FALSE, warning=FALSE}
-ggplot(base,aes(y=lifeExp, x=log(gdpPercap), col=continent)) + geom_point() +
-  geom_smooth(method = "lm", se=FALSE) + 
-  labs(x = "PIB per capita (log)",
-       y = "Expectativa de vida") + theme_bw()
-```
-
-## Argumento size
-  
-```{r scatter4, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=5.5, message=FALSE, warning=FALSE}
-ggplot(base,aes(y=lifeExp, x=log(gdpPercap), col=continent,size = pop)) + geom_point() +
-  geom_smooth(method = "lm", se=FALSE) + 
-  labs(x = "PIB per capta (log)",
-       y = "Expectativa de vida") + theme_bw()
-```
-
-## Facet 
-  
-```{r scatter5, echo=TRUE, fig.align='center', fig.height=5.5, fig.width=8, message=FALSE, warning=FALSE}
-ggplot(base,aes(x=log(gdpPercap), y=lifeExp, col=continent,
-                size = pop)) + geom_point() + geom_smooth(method = "lm", se=FALSE) + 
-  labs(x = "PIB per capita (log)", y = "Expectativa de vida") + theme_bw() + 
-  facet_grid(~continent)
-```
-
-## Criando gráficos com Esquisse 
-
-O esquisse permite visualizar gráficos no estilo ggplot2 usando point n' click. É uma ótima ferramenta para "estudar" o ggplot2.  
-
-
-```{r esquise, message=FALSE, warning=FALSE, eval = FALSE}
-library(esquisse)
-
-esquisser(viewer = "browser")
-```
-
-
-```{r imagem_esquisse, figures-side, fig.show="hold", echo=FALSE, out.height="70%", out.width="90%", fig.align='center', fig.height=3}
-
-
-knitr::include_graphics("imagem/esquisse.png")
-```
-
-## Gerando gráficos interativos 
-  
-Vamos resgatar um gráfico que fizemos lá atrás.
-
-```{r plotly2, echo=TRUE, message=FALSE, fig.height=4, fig.width=5.5, warning=FALSE, fig.align='center'}
-library(plotly)
-grafico <- ggplot(base,aes(y=lifeExp, x=log(gdpPercap), col=continent)) + geom_point() +
-  labs(x = "PIB per capita (log)",
-       y = "Expectativa de vida") + theme_bw()
-ggplotly(grafico)
-```
 
 # Para aprender mais
 
