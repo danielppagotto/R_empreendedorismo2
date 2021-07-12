@@ -72,7 +72,7 @@ knitr::include_graphics("imagem/GEM_Logo.jpg")
 
 #### - Tratar os microdados exigiria mais tempo e nivelamento em estatística para trabalhar com bases de amostragem complexa
 
-#### - Os relatórios sobre o Brasil podem ser acessados no site do Instituto Brasileiro de Qualidade e Produtividade por desse [link](https://ibqp.org.br/gem/download/).  
+#### - Os relatórios sobre o Brasil podem ser acessados no site do Instituto Brasileiro de Qualidade e Produtividade por esse [link](https://ibqp.org.br/gem/download/).  
 <br>
 ```{r gem_logo2, figures-side, fig.show="hold", echo=FALSE, out.height="100%", out.width="100%", fig.align='center', fig.height=3}
 
