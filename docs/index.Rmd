@@ -128,10 +128,10 @@ A base de especialistas do GEM contempla diferentes dimensões:
 * **Finanças empreendedoras**: disponibilidade de diferentes fontes de finanças para pequenas e médias empresas (PMEs)
 * **Políticas governamentais**: o quanto as políticas públicas contribuem para o empreendedorismo
   + O quanto empreendedorismo é importante como uma política de governo
-  + O quanto impostos e burocracia afetam empreendedorismo
-* **Programas governamentais para empreendedorismo**: presença de programas governamentais para empreendedorismo 
+  + O quanto impostos e burocracia afetam o empreendedorismo
+* **Programas governamentais para empreendedorismo**: presença de programas governamentais com o foco em empreendedorismo 
 * **Educação empreendedora**: presença de treinamentos sobre criação e gerenciamento de PMEs em diferentes graus de ensino
-  + Nível básico 
+  + Nível Básico 
   + Nível Superior
 * **Transferência de Pesquisa & Desenvolvimento (P&D)**: o quanto pesquisas nacionais conduzem a criação de oportunidades comerciais e estão disponíveis para PMEs
 
@@ -141,7 +141,7 @@ A base de especialistas do GEM contempla diferentes dimensões:
 * **Infraestrutura legal e comercial**: presença de serviços e instituições que fornecem suporte a PMEs 
 * **Regulação de entrada**: que é dividida em a) dinamismo de mercado - o quanto o mercado muda de ano a ano; b) abertura de mercado - o quanto novas empresas são livres para entrar em mercados existentes 
 * **Infraestrutura física**: facilidade de acessar recursos físicos (ex.: comunicação, logística, espaço físico)
-* **Cultura e normas sociais**: o quanto normas sociais e culturais encorajam novos métodos de negócios que podem gerar riqueza e renda de uma pessoa 
+* **Cultura e normas sociais**: o quanto normas sociais e culturais encorajam novos métodos de negócios que podem gerar riqueza e renda para uma pessoa 
 
 Vamos começar lendo a base a partir do meu repositório do github: 
 
@@ -161,7 +161,7 @@ gem_especialistas <- read_delim("https://raw.githubusercontent.com/danielppagott
 glimpse(gem_especialistas)
 ```
 ---
-# Explorando base de especialistas
+# Explorando a base de especialistas
 Vamos baixar a base e comparar alguns países: Brasil, Chile, Colômbia e México. 
 
 Além disso, vamos separar algumas variáveis de interesse: `economy`, `year`, `gov_support`, `taxes_bureaucracy`, `gov_programs`, `internal_market_dynamics`.
@@ -227,7 +227,7 @@ gem_paises_selecionados %>%
 ```
 
 ---
-# Aumentando fontes
+# Aumentando as fontes
 Vamos aumentar as fontes e retirar a legenda
 ```{r ggplot4, fig.height=4,fig.width=10, fig.align='center'}
 
@@ -267,20 +267,20 @@ Fonte: [giphy](https://media.giphy.com/media/H1f1T0tKK4jEfNt6MG/giphy.gif)
 # Explorando dados de APS
 Os dados consolidados do levantamento com população adulta é composto pelas seguintes variáveis: 
 
-* **Taxa de Oportunidades Percebidas**: Percentual de indivíduos de 18 a 64 anos (exceto aqueles envolvidos em algum estágio de atividade empreendedora) que enxergam boas oportunidades para se iniciar um negócio na área onde vivem. 
+* **Taxa de Oportunidades Percebidas**: percentual de indivíduos de 18 a 64 anos (exceto aqueles envolvidos em algum estágio de atividade empreendedora) que enxergam boas oportunidades para se iniciar um negócio na área onde vivem. 
 
-* **Taxa de atividade empreendedora total (TAE)**: Percentual da população de 18 a 64 anos que é um empreendedor nascente ou proprietário-gerente de um novo negócio.
+* **Taxa de atividade empreendedora total (TAE)**: percentual da população de 18 a 64 anos que é um empreendedor nascente ou proprietário-gerente de um novo negócio.
 
-* **Medo de fracassar**: Percentual da população de 18 a 64 anos (indivíduos envolvidos em qualquer estágio da atividade empresarial excluídos) que indicam que o medo do fracasso os impedem de abrir um negócio.
+* **Medo de fracassar**: percentual da população de 18 a 64 anos (indivíduos envolvidos em qualquer estágio da atividade empresarial excluídos) que indicam que o medo do fracasso os impedem de abrir um negócio.
 
-* **Empreendedorismo como boa escolha de carreira**: Percentual da população de 18 a 64 anos que concorda com a afirmação de que, em seu país, a maioria das pessoas considera iniciar um negócio como uma escolha de carreira desejável.
+* **Empreendedorismo como boa escolha de carreira**: percentual da população de 18 a 64 anos que concorda com a afirmação de que, em seu país, a maioria das pessoas considera iniciar um negócio como uma escolha de carreira desejável.
 
 Para conhecer todas acesse [aqui](https://www.gemconsortium.org/wiki/1154). 
 
 ---
 # Associando o GEM a outras bases 
 
-Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI) que pode ser acessada por meio da seguinte [página](https://info.worldbank.org/governance/wgi/). 
+Muitas pesquisas utilizam o GEM associado a outras bases. Para o nosso exercício, vamos utilizar dados da Worldwide Governance Indicator (WGI), que pode ser acessada por meio da seguinte [página](https://info.worldbank.org/governance/wgi/). 
 
 ### *"Governança consiste na tradição e nas instituições pelas quais a autoridade em um país é exercida. Isso inclui o processo pelo qual um governante é escolhido, monitorado e substituído; a capacidade do governo formular efetivamente e implementar políticas sólidas; e o respeito dos cidadãos e do Estado pelas instituições que regem as interações econômicas e sociais entre eles."* (WGI)
 
@@ -289,15 +289,15 @@ As variáveis variam entre -2,5 (fraco índice de governança) a 2,5 (forte índ
 ---
 # Conhecendo variáveis do WGI
 
-* **Control of Corruption**: Reflete as percepções da extensão em que o poder público é exercido para ganho privado, incluindo formas insignificantes e grandes de corrupção, bem como a "captura" do Estado pelas elites e interesses privados.
+* **Control of Corruption**: reflete as percepções da extensão em que o poder público é exercido para ganho privado, incluindo formas insignificantes e grandes de corrupção, bem como a "captura" do Estado pelas elites e interesses privados.
 
-* **Rule of Law**: Reflete as percepções sobre o nível em que os agentes confiam e cumprem as regras da sociedade e, em particular, a qualidade da execução de contratos, direitos de propriedade, polícia e tribunais, bem como a probabilidade de crime e violência.
+* **Rule of Law**: reflete as percepções sobre o nível em que os agentes confiam e cumprem as regras da sociedade e, em particular, a qualidade da execução de contratos, direitos de propriedade, polícia e tribunais, bem como a probabilidade de crime e violência.
 
-* **Regulatory Quality**: Reflete a percepção da capacidade do governo de formular e implementar políticas e regulamentações sólidas que permitam e promovam o desenvolvimento do setor privado.
+* **Regulatory Quality**: reflete a percepção da capacidade do governo de formular e implementar políticas e regulamentações sólidas que permitam e promovam o desenvolvimento do setor privado.
 
-* **Politicial Stability and Absence of Violence/Terrorism**: A Estabilidade Política e Ausência de Violência/Terrorismo mede as percepções da probabilidade de instabilidade política e/ou violência com motivação política, incluindo terrorismo.
+* **Politicial Stability and Absence of Violence/Terrorism**: mede as percepções da probabilidade de instabilidade política e/ou violência com motivação política, incluindo terrorismo.
 
-* **Voice and Accountability**: Reflete as percepções sobre o nível em que os cidadãos de um país podem participar da seleção de seu governo, bem como a liberdade de expressão, a liberdade de associação e a liberdade de mídia.
+* **Voice and Accountability**: reflete as percepções sobre o nível em que os cidadãos de um país podem participar da seleção de seu governo, bem como a liberdade de expressão, a liberdade de associação e a liberdade de mídia.
 ---
 # Juntando bases
 
