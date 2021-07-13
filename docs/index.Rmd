@@ -66,7 +66,7 @@ knitr::include_graphics("imagem/GEM_Logo.jpg")
 ---
 # Global  Entrepreneurship Monitor 
 
-#### - Os microdados do GEM ficam disponíveis após três anos. Porém, no [site](http://gem-consortium.ns-client.xyz/data) é possível acessá-los 
+#### - Os microdados do GEM ficam disponíveis após três anos. No [site](http://gem-consortium.ns-client.xyz/data) é possível acessá-los 
 
 #### - Para esse curso serão apresentados dados consolidados por países, disponível também no site 
 
