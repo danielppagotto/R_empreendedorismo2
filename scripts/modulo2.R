@@ -101,14 +101,19 @@ wgidataset <- read_csv("https://raw.githubusercontent.com/danielppagotto/R_empre
 
 gem_aps <- read_delim("https://raw.githubusercontent.com/danielppagotto/R_empreendedorismo2/main/arquivos%20de%20bases/gem_2019_aps.csv", ";", escape_double = FALSE, trim_ws = TRUE)
 
+gem_especialistas_2019 <- gem_especialistas %>% 
+                            filter(year == 2019)
+
+
+
 #Juntando bases
+
 gem_wgid <- gem_aps %>% 
-  left_join(wgidataset, by = c("abrev" = "code")) %>% 
-  select(economy, continent, tea, perceived_opportunities,
-         fear_failure, established_ownership, 
-         entrepreneurship_as_good_carrer_choice,
-         corruption, rule_of_law, regulatory_quality, 
-         political_stability, voice_accountability)
+  left_join(wgidataset, by = c("abrev" = "code")) 
+
+
+total <- gem_wgid%>% 
+  left_join(gem_especialistas_2019, by = c("cod_pais" = "code"))
 
 
 gem_wgid %>%
@@ -141,4 +146,15 @@ gem_wgid %>%
   filter(continent == "Europa") %>% 
   select(-economy,-continent) %>% 
   ggpairs()
+
+
+
+modelo <- lm(female_male_tea ~ corruptio, data = total)
+
+summary(modelo)
+gvlma::gvlma.lm(modelo)
+
+plot(modelo)
+
+
 
